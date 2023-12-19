@@ -1,0 +1,6 @@
+@ExpressAPI_HostAddress = http://localhost:5179
+
+GET {{ExpressAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
