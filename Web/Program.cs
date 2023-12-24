@@ -1,19 +1,27 @@
+using Asp.Versioning;
 using Data;
 using Microsoft.EntityFrameworkCore;
-using REST;
+using Microsoft.Extensions.Options;
+using Web.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<ExpressContext>(
-    //Only For Development Purpose
-    opt => opt.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=ExpressDev;Integrated Security=True")
-                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+Data.Configuration.ContainerBindings.AddRepositories(
+    builder.Services, 
+    builder.Configuration.GetConnectionString("dev")
 );
 
-builder.Services.AddControllers()
-            .AddApplicationPart(typeof(AssemblyReference).Assembly);
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddMediatR(
+    config => config.RegisterServicesFromAssembly(
+                typeof(Application.AssemblyReference).Assembly));
+
+builder.Services
+    .AddControllers()
+    .AddApplicationPart(typeof(REST.AssemblyReference).Assembly);
+
+ExpressConfiguration.ConfigureApiVersioning(builder.Services);
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
