@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Web.Options;
 
 namespace Web.Configuration
 {
@@ -19,6 +20,12 @@ namespace Web.Configuration
                 options.GroupNameFormat = "'v'VVV";
                 options.SubstituteApiVersionInUrl = true;
             });
+
+            //Add Swagger
+            Services.AddSwaggerGen();
+            //Configure Versioning for swagger
+            Services.ConfigureOptions<ConfigureSwaggerOptions>();
+            Services.AddEndpointsApiExplorer();
         }
     }
 }
