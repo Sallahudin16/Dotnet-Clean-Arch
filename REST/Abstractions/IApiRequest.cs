@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace REST.Controllers
+namespace REST.Abstractions
 {
-    public class ApiController
+    public interface IApiRequest
     {
+        public bool Validated();
+        public bool ValidationErrors();
     }
 }
